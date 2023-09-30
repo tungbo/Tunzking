@@ -1,0 +1,84 @@
+﻿@model ShoppingCartVM
+
+<div class="single-checkout">
+    <div class="container">
+        <div class="wrapper">
+            <div class="checkout flexwrap">
+                <div class="item left styled">
+                    <h1>Shipping Details</h1>
+                    <form method="post">
+                        <p>
+                            <label asp-for="OrderHeader.FirstName">Name <span></span></label>
+                            <input asp-for="OrderHeader.FirstName">
+                            <span asp-validation-for="OrderHeader.FirstName"></span>
+                        </p>
+                        <p>
+                            <label asp-for="OrderHeader.PhoneNumber">Phone <span></span></label>
+                            <input asp-for="OrderHeader.PhoneNumber">
+                            <span asp-validation-for="OrderHeader.PhoneNumber"></span>
+                        </p>
+                        <p>
+                            <label asp-for="OrderHeader.StreetAddress">Street Address <span></span></label>
+                            <input asp-for="OrderHeader.StreetAddress">
+                            <span asp-validation-for="OrderHeader.StreetAddress"></span>
+                        </p>
+                        <p>
+                            <label asp-for="OrderHeader.City">City </label>
+                            <input asp-for="OrderHeader.City">
+                            <span asp-validation-for="OrderHeader.City"></span>
+                        </p>
+                        <div class="primary-checkout">
+                            <button class="primary-button" type="submit">Place Order</button>
+                        </div>
+                    </form>
+                    @*<div class="shipping-methods">
+                        <h2>Shipping Methods</h2>
+                        <p class="checkset">
+                            <input type="radio" checked>
+                            <label>$5.00 Flate Rate</label>
+                        </p>
+                    </div>*@
+                </div>
+                <div class="item right">
+                    <h2>Order Summary</h2>
+                    <div class="summary-order is_sticky">
+                        <div class="summary-totals">
+                            <ul>
+                                <li>
+                                    <span>Subtotal</span>
+                                    <span>$@Model.OrderHeader.OrderTotal</span>
+                                </li>
+                                <li>
+                                    <span>Shipping:</span>
+                                    <span style="text-decoration: line-through">$10</span>
+                                </li>
+                                <li>
+                                    <span>Total</span>
+                                    <strong>$@Model.OrderHeader.OrderTotal</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="products mini">
+                            @foreach(var details in Model.ShoppingCartList)
+                            {
+                                <li class="item">
+                                <div class="thumbnail object-cover">
+                                    <img src="@details.Product.ImageUrl" alt="">
+                                </div>
+                                <div class="item-content">
+                                    <p>Dimmable Ceiling Light Modern</p>
+                                    <span class="price">
+                                        <span>$@details.Product.CurrentPrice</span>
+                                        <span>x @details.Count</span>
+                                    </span>
+                                </div>
+                            </li>
+                            }
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Product>
+<div class="single-category">
+    <div class="container">
+        <div class="wrapper">
+            <div class="column">
+                <div class="holder">
+                    <div class="section">
+                        <div class="row">
+                            <div class="cat-head">
+                                <div class="breadcrumb">
+                                    <ul class="flexitem">
+                                        <li><a href="#">Home</a></li>
+                                        <li>Search</li>
+                                    </ul>
+                                </div>
+                                <div class="cat-navigation flexitem">
+                                    <div class="item-perpage mobile-hide">
+                                        <div class="label">Items 10 per page</div>
+                                        <div class="desktop-hide">10</div>
+                                    </div>
+                                    <div class="item-options">
+                                        <div class="label">
+                                            <span class="mobile-hide">Show 10 per page</span>
+                                            <div class="desktop-hide">10</div>
+                                            <i class="ri-arrow-down-s-line"></i>
+                                        </div>
+                                        <ul>
+                                            <li>10</li>
+                                            <li>20</li>
+                                            <li>30</li>
+                                            <li>ALL</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products main flexwrap">
+                            @foreach (var product in Model)
+                            {
+                                <div class="item">
+                                    <div class="media">
+                                        <div class="thumbnail object-cover">
+                                            <a asp-action="Details" asp-route-id="@product.Id">
+                                                <img src="@product.ImageUrl" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="hoverable">
+                                            <ul>
+                                                <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
+                                                <li><a asp-controller="Home" asp-action="Details" asp-route-id="@product.Id"><i class="ri-eye-line"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <div class="rating">
+                                            <div class="stars"></div>
+                                            <span class="mini-text">(1,955)</span>
+                                        </div>
+                                        <h3><a asp-action="Details" asp-route-id="@product.Id">@product.Title</a></h3>
+                                        <div class="price">
+                                            <span class="current">$@product.CurrentPrice</span>
+                                            <span class="normal mini-text">$@product.Price</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="load-more flexcenter">
+                            <a href="#" class="secondary-button">Load more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
