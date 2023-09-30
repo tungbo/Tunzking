@@ -1,0 +1,89 @@
+﻿@model ProductVM
+
+<form method="post" enctype="multipart/form-data">
+    <input hidden asp-for="Product.Id" />
+    <input hidden asp-for="Product.ImageUrl" />
+    <div class="row">
+        <div class="col-8">
+            <div class="border p-3 mt-4">
+                <div class="row">
+                    <h2>@(Model.Product.Id != 0 ? "Update" : "Create") Product</h2>
+                    <hr />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.Title" class="form-label mt-4"></label>
+                    <input asp-for="Product.Title" class="form-control">
+                    <span asp-validation-for="Product.Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.Description" class="form-label mt-4"></label>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.Gender" class="form-label mt-4"></label>
+                    <input asp-for="Product.Gender" class="form-control">
+                    <span asp-validation-for="Product.Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.CategoryId" class="form-label mt-4"></label>
+                    <select asp-for="Product.CategoryId" asp-items="@Model.CategoryList" class="form-select">
+                        <option disabled selected>--Select Category--</option>
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.Brand" class="form-label mt-4"></label>
+                    <input asp-for="Product.Brand" class="form-control">
+                    <span asp-validation-for="Product.Brand" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.Price" class="form-label mt-4"></label>
+                    <input asp-for="Product.Price" class="form-control">
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.CurrentPrice" class="form-label mt-4"></label>
+                    <input asp-for="Product.CurrentPrice" class="form-control">
+                    <span asp-validation-for="Product.CurrentPrice" class="text-danger"></span>
+                </div>
+                <div class="row mt-4 col-md-6">
+                    <div class="col-6">
+                        @if (Model.Product.Id != 0)
+                        {
+                            <button type="submit" class="btn btn-outline-success form-control">Update</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-outline-success form-control">Create</button>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control">
+                            Back to list
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 mt-4">
+            <img src="@Model.Product.ImageUrl" style="width:100%; border-radius: 5px; border: 1px solid #bbb9b9" />
+            <div class="form-group">
+                <label asp-for="Product.ImageUrl" class="form-label mt-4"></label>
+                <input type="file" name="file" class="form-control">
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent',
+        });
+    </script>
+    @{
+    <partial name="_ValidationScriptsPartial"/>
+    }
+}

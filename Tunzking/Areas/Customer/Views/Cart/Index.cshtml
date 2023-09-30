@@ -1,0 +1,86 @@
+﻿@model ShoppingCartVM
+
+<div class="single-cart">
+    <div class="container">
+        <div class="wrapper">
+            <div class="breadcrumb">
+                <ul class="flexitem">
+                    <li><a href="#">Home</a></li>
+                    <li>Cart</li>
+                </ul>
+            </div>
+            <div class="page-title">
+                <h1>Shopping Cart</h1>
+            </div>
+            <div class="products one cart">
+                <div class="flexwrap">
+                    <form action="" class="form-cart">
+                        <div class="item">
+                            <table id="cart-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Subtotal</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ShoppingCartList)
+                                    {
+                                        <tr>
+                                            <td class="flexitem">
+                                                <div class="thumbnail object-cover">
+                                                    <a href="#"><img src="@item.Product.ImageUrl" alt=""></a>
+                                                </div>
+                                                <div class="content">
+                                                    <strong><a href="#">@item.Product.Title</a></strong>
+                                                    <p>Brand: @item.Product.Brand</p>
+                                                </div>
+                                            </td>
+                                            <td>$@item.Price</td>
+                                            <td>
+                                                <div class="qty-control flexitem">
+                                                    <div class="minus"><a asp-action="minus" asp-route-cartId="@item.Id">-</a></div>
+                                                    <input type="text" value="@item.Count" min="1">
+                                                    <div class="plus"><a asp-action="plus" asp-route-cartId="@item.Id">+</a></div>
+                                                </div>
+                                            </td>
+                                            <td>$@item.EPrice</td>
+                                            <td><a asp-action="remove" asp-route-cartId="@item.Id" class="item-remove"><i class="ri-close-line"></i></a></td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <div class="cart-summary styled">
+                        <div class="item">
+                            <div class="cart-total">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Subtotal</th>
+                                            <td>$@Model.OrderHeader.OrderTotal</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping <span class="mini-text">(Free)</span></th>
+                                            <td style="text-decoration: line-through">$10</td>
+                                        </tr>
+                                        <tr class="grand-total">
+                                            <th>TOTAL</th>
+                                            <td><strong>$@Model.OrderHeader.OrderTotal</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a asp-action="Summary" class="secondary-button">Checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

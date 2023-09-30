@@ -1,49 +1,351 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Tunzking</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Tunzking.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tunzking</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+
+    <div id="page" class="site page-home">
+        <aside class="site-off desktop-hide">
+            <div class="off-canvas">
+                <div class="canvas-head flexitem">
+                    <div class="logo">
+                        <a href="">
+                            <img class="logo-img" src="/images/logo/Tunzking_Logo_update.svg"
+                                 alt="">
+                        </a>
+                    </div>
+                    <a href="#" class="t-close flexcenter"><i class="ri-close-line"></i></a>
+                </div>
+                <div class="departments"></div>
+                <nav></nav>
+                <div class="thetop-nav"></div>
+            </div>
+        </aside>
+        <header>
+            <div class="header-top mobile-hide">
+                <div class="container">
+                    <div class="wrapper flexitem">
+                        <div class="left">
+                            <ul class="flexitem main-links">
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Featured</a></li>
+                                <li><a href="#">Wishlist</a></li>
+                            </ul>
+                        </div>
+                        <div class="right">
+                            <ul class="flexitem main-links">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li><i class="ri-user-line"></i> @User.Identity?.Name</li>
+                                <li><a asp-area="Identity" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                }
+                                else
+                                {
+                                <li><a asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a></li>
+                                <li><a asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+            <!-- header-top -->
+            <div class="header-nav">
+                <div class="container">
+                    <div class="wrapper flexitem">
+                        <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
+                        <div class="left flexitem">
+                            <div class="logo">
+                                <a asp-controller="Home" asp-action="Index">
+                                    <img class="logo-img"
+                                         src="/images/logo/Tunzking_Logo_update.svg" alt="">
+                                </a>
+                            </div>
+                            <nav class="mobile-hide">
+                                <ul class="flexitem main-links">
+                                    <li><a href="">Home</a></li>
+                                    <li class="has-child">
+                                        <a asp-controller="Home" asp-action="Category">
+                                            Categories
+                                            <div class="icon-small"><i class="ri-arrow-down-s-line"></i></div>
+                                        </a>
+                                        <div class="mega">
+                                            <div class="container">
+                                                <div class="wrapper">
+                                                    <div class="flexcol">
+                                                        <div class="row">
+                                                            <h4>Women's Clothing</h4>
+                                                            <ul>
+                                                                <li><a href="#">Dresses</a></li>
+                                                                <li><a href="#">Tops & Tees</a></li>
+                                                                <li><a href="#">Jackets & Coats</a></li>
+                                                                <li><a href="#">Pants & Capris</a></li>
+                                                                <li><a href="#">Sweaters</a></li>
+                                                                <li><a href="#">Costumes</a></li>
+                                                                <li><a href="#">Hoodies & Sweatshirts</a></li>
+                                                                <li><a href="#">Pajamas & Robes</a></li>
+                                                                <li><a href="#">Shorts</a></li>
+                                                                <li><a href="#">Swimwear</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flexcol">
+                                                        <div class="row">
+                                                            <h4>Jewelery</h4>
+                                                            <ul>
+                                                                <li><a href="#">Accessories</a></li>
+                                                                <li><a href="#">Bags & Purses</a></li>
+                                                                <li><a href="#">Necklaces</a></li>
+                                                                <li><a href="#">Rings</a></li>
+                                                                <li><a href="#">Earrings</a></li>
+                                                                <li><a href="#">Bracelets</a></li>
+                                                                <li><a href="#">Body Jewelery</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flexcol">
+                                                        <div class="row">
+                                                            <h4>Beauty</h4>
+                                                            <ul>
+                                                                <li><a href="#">Bath Accessories</a></li>
+                                                                <li><a href="#">Makeup & Cosmetics</a></li>
+                                                                <li><a href="#">Skin Care</a></li>
+                                                                <li><a href="#">Hair Care</a></li>
+                                                                <li><a href="#">Essential Oils</a></li>
+                                                                <li><a href="#">Fragrances</a></li>
+                                                                <li><a href="#">Soaps & Bath Bombs</a></li>
+                                                                <li><a href="#">Face Masks & Coverings</a></li>
+                                                                <li><a href="#">Spa Kits & Gifts</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="right">
+                            <ul class="flexitem main-links">
+                                @*<li class="mobile-hide">
+                                    <a href="#">
+                                        <div class="icon-large"><i class="ri-heart-line"></i></div>
+                                        <div class="fly-item"><span class="item-number">0</span></div>
+                                    </a>
+                                </li>*@
+                                @if(HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart)!=null)
+                                {
+                                    <li>
+                                        <a href="#" class="iscart">
+
+                                            <div class="icon-large">
+                                                <a asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                                    <i class="ri-shopping-cart-line"></i>
+                                                </a>
+                                                <div class="fly-item"><span class="item-number">@HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart)</span></div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="#" class="iscart">
+
+                                            <div class="icon-large">
+                                                <a asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                                    <i class="ri-shopping-cart-line"></i>
+                                                </a>
+                                                <div class="fly-item"><span class="item-number">0</span></div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- header-nav -->
+            <div class="header-main mobile-hide">
+                <div class="container">
+                    <div class="wrapper flexitem">
+                        <div class="left">
+                            <div class="dpt-cat">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="search-box">
+                                <form method="post" asp-controller="Home" asp-action="search" class="search">
+                                    <span class="icon-large"><i class="ri-search-line"></i></span>
+                                    <input type="search" name="search" placeholder="Search for products">
+                                    <button type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- header-main -->
+        </header>
+        <!-- Header -->
+        <main>
+            <partial name="_Notification" />
             @RenderBody()
         </main>
-    </div>
+        <!-- Main -->
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Tunzking - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <footer>
+            <div class="widgets">
+                <div class="container">
+                    <div class="wrapper">
+                        <div class="flexwrap">
+                            <div class="row">
+                                <div class="item mini-links">
+                                    <h4>Help & Contact</h4>
+                                    <ul class="flexcol">
+                                        <li><a href="#">Your Account</a></li>
+                                        <li><a href="#">Your Orders</a></li>
+                                        <li><a href="#">Shipping Rates</a></li>
+                                        <li><a href="#">Help</a></li>
+                                        <li><a href="#">Contact us</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="item mini-links">
+                                    <h4>Product Categories</h4>
+                                    <ul class="flexcol">
+                                        <li><a href="#">Beauty</a></li>
+                                        <li><a href="#">Women's Fashion</a></li>
+                                        <li><a href="#">Men's Fashion</a></li>
+                                        <li><a href="#">Girl's Fashion</a></li>
+                                        <li><a href="#">Boy's Fashion</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="item mini-links">
+                                    <h4>Payment Info</h4>
+                                    <ul class="flexcol">
+                                        <li><a href="#">Bussiness Card</a></li>
+                                        <li><a href="#">Shop with Points</a></li>
+                                        <li><a href="#">Reload Your Balance</a></li>
+                                        <li><a href="#">Paypal</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="item mini-links">
+                                    <h4>About Us</h4>
+                                    <ul class="flexcol">
+                                        <li><a href="">Company Info</a></li>
+                                        <li><a href="">News</a></li>
+                                        <li><a href="">Investors</a></li>
+                                        <li><a href="">Careers</a></li>
+                                        <li><a href="">Policies</a></li>
+                                        <li><a href="">Customer reviews</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- widgets-->
+
+            <div class="footer-info">
+                <div class="container">
+                    <div class="wrapper">
+                        <div class="flexcol">
+                            <div class="logo">
+                                <a href="">
+                                    <img class="logo-img"
+                                         src="/images/logo/Tunzking_Logo_update.svg" alt="">
+                                </a>
+                            </div>
+                            <div class="socials">
+                                <ul class="flexitem">
+                                    <li><a href="#"><i class="ri-twitter-line"></i></a></li>
+                                    <li><a href="#"><i class="ri-facebook-line"></i></a></li>
+                                    <li><a href="#"><i class="ri-instagram-line"></i></a></li>
+                                    <li><a href="#"><i class="ri-linkedin-line"></i></a></li>
+                                    <li><a href="#"><i class="ri-youtube-line"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="mini-text">From Tunzking with love</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer -->
+
+        <div class="menu-bottom desktop-hide">
+            <div class="container">
+                <div class="wrapper">
+                    <nav>
+                        <ul class="flexitem">
+                            @*<li>
+                                <a href="#">
+                                    <i class="ri-user-6-line"></i>
+                                    <span>Account</span>
+                                </a>
+                            </li>*@
+                            <li>
+                                <a href="#0" class="t-search">
+                                    <i class="ri-search-line"></i>
+                                    <span>Search</span>
+                                </a>
+                            </li>
+                            @*<li>
+                                <a href="#0">
+                                    <i class="ri-shopping-cart-line"></i>
+                                    <span>Cart</span>
+                                    <div class="fly-item">
+                                        <span class="item-number">0</span>
+                                    </div>
+                                </a>
+                            </li>*@
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
-    </footer>
+        <!-- menu bottom -->
+
+        <div class="search-bottom desktop-hide">
+            <div class="container">
+                <div class="wrapper">
+                    <form method="post" asp-controller="Home" asp-action="search" class="search">
+                        <a href="#" class="t-close search-close flexcenter"><i class="ri-close-line"></i></a>
+                        <span class="icon-large"><i class="ri-search-line"></i></span>
+                        <input type="search" placeholder="Search" name="search">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- search bottom -->
+
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
