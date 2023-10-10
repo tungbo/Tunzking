@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Security.Claims;
 using Tunzking.DataAccess.Repository.IRepository;
 using Tunzking.Models;
 using Tunzking.Utility;
+using X.PagedList;
 
 namespace TunzkingWeb.Areas.Customer.Controllers
 {
@@ -35,39 +37,54 @@ namespace TunzkingWeb.Areas.Customer.Controllers
             return View();
         }
 
-        public IActionResult Search(string? search)
+        public IActionResult Search(string? search, int? page)
         {
-            if(string.IsNullOrEmpty(search))
+            int pageNumber = (page ?? 1);
+            int pageSize = 6;
+            if (string.IsNullOrEmpty(search))
             {
                 return RedirectToAction("Category");
             }
             else
             {
                 IEnumerable<Product> productList = _unitOfWork.Product.GetAll(u=>u.Title.Contains(search),includeProperties: "Category");
-                return View(productList);
+
+                IPagedList<Product> pagedList = productList.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
             }
         }
 
-        public IActionResult Category()
+
+        public IActionResult Category(int? page)
         {
+            int pageNumber = (page ?? 1);
+            int pageSize = 6;
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
-            return View(productList);
+
+            IPagedList<Product> pagedList = productList.ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
         }
 
         [HttpPost]
         [ActionName("Category")]
-        public IActionResult CategoryPOST()
+        public IActionResult CategoryPOST(int? page)
         {
+            int pageNumber = 1;
+            int pageSize = 6;
             string filter = Request.Form["radio"];
             if(!string.IsNullOrEmpty(filter))
             {
                 IEnumerable<Product> productList = _unitOfWork.Product.GetAll(u=>u.Brand == filter,includeProperties: "Category");
-                return View(productList);
+
+                IPagedList<Product> pagedList = productList.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
             }
             else
             {
                 IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
-                return View(productList);
+
+                IPagedList<Product> pagedList = productList.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
             }
         }
 
@@ -90,6 +107,11 @@ namespace TunzkingWeb.Areas.Customer.Controllers
             if(!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+            if(shoppingCart.Count > 100)
+            {
+                TempData["error"] = "1-100";
+                return RedirectToAction("Details");
             }
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userIdString = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
