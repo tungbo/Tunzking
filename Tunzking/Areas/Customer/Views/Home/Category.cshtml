@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Product>
+﻿@using X.PagedList;
+@model IPagedList<Product>
+
 <div class="single-category">
     <div class="container">
         <div class="wrapper">
@@ -37,25 +39,6 @@
                                         <li>Category</li>
                                     </ul>
                                 </div>
-                                <div class="cat-navigation flexitem">
-                                    <div class="item-perpage mobile-hide">
-                                        <div class="label">Items 10 per page</div>
-                                        <div class="desktop-hide">10</div>
-                                    </div>
-                                    <div class="item-options">
-                                        <div class="label">
-                                            <span class="mobile-hide">Show 10 per page</span>
-                                            <div class="desktop-hide">10</div>
-                                            <i class="ri-arrow-down-s-line"></i>
-                                        </div>
-                                        <ul>
-                                            <li>10</li>
-                                            <li>20</li>
-                                            <li>30</li>
-                                            <li>ALL</li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="products main flexwrap">
@@ -90,7 +73,26 @@
                             }
                         </div>
                         <div class="load-more flexcenter">
-                            <a href="#" class="secondary-button">Load more</a>
+                            @*<span>Page @(Model.PageCount < Model.PageNumber ? 0:Model.PageNumber) of @Model.PageCount</span>*@
+                            @if(Model.HasPreviousPage)
+                            {
+                                <a href="@Url.Action("Category", new { page = Model.PageNumber - 1})" class="primary-button">Previous</a>
+                            }
+                            @for(int i=1; i<=Model.PageCount; i++)
+                            {
+                                if(i==Model.PageNumber)
+                                {
+                                    <span class="paging-button">@i</span>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Category", new { page = i})" class="primary-button">@i</a>
+                                }
+                            }
+                            @if (Model.HasNextPage)
+                            {
+                                <a href="@Url.Action("Category", new { page = Model.PageNumber + 1})" class="primary-button">Next</a>
+                            }
                         </div>
                     </div>
                 </div>

@@ -17,7 +17,7 @@ namespace Tunzking.Models
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product Product { get; set; }
-        [Range(1, 1000, ErrorMessage = "1-1000")]
+        [Range(1, 100, ErrorMessage = "1-100")]
         public int Count { get; set; }
 
         public Guid ApplicationUserId { get; set; }
